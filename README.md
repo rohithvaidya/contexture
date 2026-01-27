@@ -1,3 +1,25 @@
+<div align="center">
+  <img src="https://sodafoundation.io/wp-content/uploads/2025/10/SODA_logo_outline_c.png" alt="SODA Foundation Logo" width="100"/>
+  <p align="left">
+    <br/>
+    <b>SODA Contexture</b> is a new initiative by the SODA Foundation. <br/>
+    The <b>SODA TS AI Agent</b> serves as the first prototype of this project, demonstrating our vision for intelligent data management.
+  </p>
+</div>
+
+### Welcome to SODA Contexture
+### 🚧 Status: Research & Development in Progress
+We are currently in the active R&D phase, exploring new possibilities and building the foundations of Contexture. Things are moving fast, and we are excited about the road ahead!
+### 🤝 Join Us!
+We warmly welcome more contributors and partners to join us on this journey. Whether you are a developer, researcher, or organization interested in data management and AI, there is a place for you here.
+- **Contribute**: Join the development of the SODA Contexture on [GitHub](https://github.com/sodafoundation/contexture)
+- **Connect**: Have questions or want to get involved? Chat with us on Slack: [Join SODA Foundation Slack](https://sodafoundation.io/slack)
+---
+<div align="center">
+  <sub>Part of the <a href="https://sodafoundation.io">SODA Foundation</a> ecosystem.</sub>
+</div>
+
+
 # SODA TS AI Agent is part of SODA Contexture Project. It is the first prototype developement and research.
 ---
 # soda-ts-ai-agent
