@@ -2,126 +2,82 @@
   <img src="https://sodafoundation.io/wp-content/uploads/2025/10/SODA_logo_outline_c.png" alt="SODA Foundation Logo" width="100"/>
   <p align="left">
     <br/>
-    <b>SODA Contexture</b> is a new initiative by the SODA Foundation. <br/>
-    The <b>SODA TS AI Agent</b> serves as the first prototype of this project, demonstrating our vision for intelligent data management.
   </p>
 </div>
 
-### Welcome to SODA Contexture
-### 🚧 Status: Research & Development in Progress
-We are currently in the active R&D phase, exploring new possibilities and building the foundations of Contexture. Things are moving fast, and we are excited about the road ahead!
-### 🤝 Join Us!
-We warmly welcome more contributors and partners to join us on this journey. Whether you are a developer, researcher, or organization interested in data management and AI, there is a place for you here.
-- **Contribute**: Join the development of the SODA Contexture on [GitHub](https://github.com/sodafoundation/contexture)
-- **Connect**: Have questions or want to get involved? Chat with us on Slack: [Join SODA Foundation Slack](https://sodafoundation.io/slack)
----
-<div align="center">
-  <sub>Part of the <a href="https://sodafoundation.io">SODA Foundation</a> ecosystem.</sub>
-</div>
+### SODA Contexture
+The Open Context Engine for AI
 
+### What is SODA Contexture?
+SODA Contexture is an open source project under SODA Foundation (a sub-foundation under Linux Foundation). 
+It is an open context building engine for AI.
+SODA Contexture provides a platform to build enriched operational contexts to AI Agents for various data sources at scale. 
+It improves the accuracy, efficiency, and speed of data inferences and insights significantly.
 
-# SODA TS AI Agent is part of SODA Contexture Project. It is the first prototype developement and research.
----
-# soda-ts-ai-agent
+The project defines the Open Context Specification(OCS) to describe the data in a structured way. The specification provides the context implementation guidelines. 
+SODA Contexture builds contexts using internal context agents based on OCS and also third party context sources.
 
-soda-ts-ai-agent is an open source AI agent for time series data
-An initial implementation of the TSDB copilot to test multiple frameworks and their effect on the quality of answers. Currently using direct HTTP requests to the Prometheus endpoints with LLM generated PromQL, along with a dynamically generated prompt for each user query.
+### The key problems it solves
+There is no standard way of communication to AI to get things done! 
+Hence, the data inference and insights suffer from:
+- Low Accuracy
+   - The accuracy of results varies drastically based on the nature of data and inputs
+   = Mixing guesses and different sources of knowledge confuses AI
+- Inconsistency
+   - Hallucination is key known issue with AI
+- High Latency
+  - Based on the type of query and volume of data, it fails to give ontime results
+- Huge Cost
+  - Iterations to get a close results and verification add costs
+- Lack of Scale
+  - Works for small amount of data or 1 agent, when it comes to scale, it fails
+- Low Reliability
+  = Due uncertain results AI is not fully dependable
 
-## 1. Prerequisites
-### A running Time Series Database (TSDB) with accessible endpoints  
-  - Currently, this project uses **Prometheus** as the TSDB backend  
-  - Prometheus must be up and running, and its HTTP API endpoint should be available.
+One of the solutions to these problems is to provide the right context to the AI, for it to understand better to fetch the right pieces of data to derive the right inference. 
+However this is not easy. Because, the data relationships and types can vary. That is why SODA Contexture is trying to solve the issue of “Missing Context” 
+through OCS and building various components connecting to provide enriched and structured context.
 
-**Setting up Prometheus**
-Follow the official Prometheus installation guide to get started:
-(https://prometheus.io/docs/prometheus/latest/getting_started/)
+### System Architecture
+<img width="164" height="164" alt="image" src="https://github.com/user-attachments/assets/c9fc6cdd-8be9-4a1d-a825-ab5b7db10a28" />
 
-### An available LLM served through Ollama  
-- This project relies on Ollama to run large language models locally.  
-- Install Ollama by following the instructions:
-   (https://docs.ollama.com/linux)  
-- Make sure the Ollama service is running (default endpoint: `http://127.0.0.1:11434`).  
-- Model should be downloaded and running in Ollama.
+SODA Contexture derives enriched context based on the OCS (Open Context Specification) implementation 
+for the specific data sources and fills the issue of “Missing Context”. It builds the best possible 
+context using its context building engine based on OCS for the input queries. Using this enhanced context
+AI models can understand the context better and fetch the right data (or data sets) to provide accurate 
+inferences and insights.
 
-## 2. Install Dependencies
+<img width="368" height="146" alt="image" src="https://github.com/user-attachments/assets/0529f34d-fa4f-44a4-8846-7ed973a4c0f6" />
 
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-```
+#### SODA Contexture Ecosystem Comprises of:
+- SODA Contexture Engine: The core component that processes user requests and orchestrates context generation.
+- Open Context Specification: The specification which details the operational context building attributes for various types of data.
+- Data Connectors: Logical Connectors to different types of data such as prometheus, sql, s3 and so on to understand the nature of data storage and layout. These connectors provide SODA Contexture a better idea to use the OCS to build the context better. These are logical connectors for specific data source
+- Context Providers: Sources that provide enriched context information (e.g., Istio, Kubernetes).
 
-## 3. Prepare Your Config
+### Open Context Specification (OCS)
+OCS (Open Context Specification) provides the specification for operational data context spec for different kinds of data sources. It provides the key attributes to derive the best possible context to enable AI to provide more accurate results.
 
-- **TSDB endpoint**: Set in `config/prometheus_config.yaml`
-- **Ollama endpoint**: Set in `config/ollama_config.yaml`
-- **Agent modes**: can be configured in `config/agent_modes.yaml`
+OCS Defines the key attributes to build the operational context:
+- Identity and Origin (The "Who" and "Where")
+  - Defines the unique fingerprint of the data source. 
+  - AI needs this to distinguish between similar metrics from different environments
+- Dimensionality & Topology (The "Relationship")
+  - Defines how this metric relates to other components
+  - This is the most critical part for AI reasoning.
+- Metric Semantics (The "What")
+  - Define what the number actually represents
+  - This will avoid the AI comparing unrelated mertrics.
+- Temporal Context (The "When")
+  - AI needs to know if it's looking at a "point-in-time" value or a trend.
+  - Interval, Duration, Time stamp etc
+- Operational Constraints (The "How")
+  - This tells the AI how to interpret the health of the metric.
+  - Threshold, Polarity, Aggregation
 
-## 4. Agent Modes
-Currently we have
-- `DYNAMIC_PROMPT`: Advanced prompt building with context and examples -> generate PromQL -> HTTP request to Prometheus endpoint
-Any other modes like MCP or any other can be added.
+### Progress 
+We are actively developing the project. So if you would like to join the design, OCS and other components, please join us!
 
-## 5. Run CLI
-
-#### Pre-requisite
-Please follow the steps to configure Agent mode before running the cli.
-- `DYNAMIC_PROMPT`: Follow [Configure DYNAMIC_PROMPT](#8-dynamic-prompt-mode)
-
-#### Running the solution
-
-```bash
-python pkg/cli.py   --query-set test/query_sets/example1.yaml   --copilot DYNAMIC_PROMPT   --prometheus-config config/prometheus_config.yaml
-```
-
-## 6. Query Set Format
-
-```yaml
-queries:
-  - "Which cluster has highest CPU utilisation?"
-  - "Which cluster has the highest memory allocation?"
-```
-
-## 7. Output Format
-
-Output is saved as YAML in the specified output directory.
-
-```yaml
-"Your question here":
-  final: "Final human-readable summary or conclusion"
-  ollama_response: "Detailed step-by-step reasoning or intermediate generation from LLM"
-  promql: "raw PromQL query"
-  result: "Output results of PromQL execution"
-  error: "Optional error message if something went wrong"
-```
-
-Or on error:
-```yaml
-Which cluster has highest CPU utilisation in last month?:
-  error: timed out
-```
-
-## 8. Dynamic Prompt Mode
-
-To onboard domain knowledge for better prompts:
-
-```bash
-# To embed the mappings with current set of metrics available in prometheus.
-curl <prometheus_url>/metrics > ./config/metrics.txt
-
-python pkg/copilot/DP_logic/DynamicPrompt/onboarding_cli.py
-```
-
-It creates vector embeddings for metric context.
-
-### **Important:** Update the following paths in your `.env` file:
-
-```env
-EMBEDDING_PATH=/Path to your/pkg/copilot/DP_logic/DynamicPrompt/config/embeddings/embeddings.npz
-TEMPLATE_PATH=/Path to your/pkg/copilot/DP_logic/DynamicPrompt/config/template_sections
-OVERRIDE_PATH=/Path to your/pkg/copilot/DP_logic/DynamicPrompt/config/overrides.json
-EXAMPLES_PATH=/Path to your/pkg/copilot/DP_logic/DynamicPrompt/config/golden_examples.json
-INFO_PATH=/Path to your/pkg/copilot/DP_logic/DynamicPrompt/config/additional_context.json
-```
-## Demo Videos
-TS AGENT flow with kubernetes metrics: https://www.youtube.com/watch?v=al3kg0OENMo
+### How to join the development?
+  - [GitHub](https://github.com/sodafoundation/contexture)
+  - [SODA Slack](https://sodafoundation.slack.com)
